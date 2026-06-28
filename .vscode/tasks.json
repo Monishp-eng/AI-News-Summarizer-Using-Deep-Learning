@@ -1,0 +1,13 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "start-frontend",
+			"type": "shell",
+			"command": "cd frontend && npm run dev -- --host 127.0.0.1 --port 5173",
+			"isBackground": true,
+			"problemMatcher": [],
+			"group": "build"
+		}
+	]
+}
