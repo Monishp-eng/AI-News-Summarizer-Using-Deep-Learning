@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { Terminal, Sliders, Play, RotateCcw, AlertTriangle } from "lucide-react";
 import LoadingSpinner from "../components/LoadingSpinner";
 import InputTabs from "../components/InputTabs";
 import SummaryCard from "../components/SummaryCard";
