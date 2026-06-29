@@ -263,170 +263,214 @@ export default function DemoPage() {
   };
 
   return (
-    <section className="mx-auto w-full max-w-5xl px-4 py-8">
-      <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-xl transition-colors dark:border-slate-800 dark:bg-slate-900 md:p-8">
-        <header className="mb-6">
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Demo Workspace</h1>
-          <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">Generate high-quality summaries from text, URL, or file input.</p>
+    <div className="relative flex-1 bg-slate-50 dark:bg-slate-950">
+      <div className="absolute inset-0 bg-grid-pattern opacity-100 pointer-events-none" />
+      <section className="relative mx-auto w-full max-w-6xl px-4 py-8">
+        <header className="mb-6 flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2 text-indigo-650 dark:text-indigo-400">
+              <Terminal className="h-5 w-5" />
+              <h1 className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-white md:text-2xl">
+                AI Inference Workspace
+              </h1>
+            </div>
+            <p className="mt-1 text-xs text-slate-600 dark:text-slate-400">
+              Scrape articles, parse files, customize hyperparameters, and perform semantic summarization.
+            </p>
+          </div>
+          <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white/70 px-3.5 py-1.5 text-xs font-semibold text-slate-700 shadow-sm backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/70 dark:text-slate-350">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
+            </span>
+            <span>T5-Small Model Active</span>
+          </div>
         </header>
 
-        <InputTabs
-          inputType={inputType}
-          setInputType={setInputType}
-          articleInputs={articleInputs}
-          onArticleChange={handleArticleChange}
-          onAddArticle={handleAddArticle}
-          onRemoveArticle={handleRemoveArticle}
-          bulkPasteText={bulkPasteText}
-          setBulkPasteText={setBulkPasteText}
-          onSplitBulkText={handleSplitBulkText}
-          urlInput={urlInput}
-          setUrlInput={setUrlInput}
-          fileName={fileName}
-          fileCharCount={fileText.length}
-          onFilePicked={onFilePicked}
-          charCount={charCount}
-        />
+        <div className="grid gap-6 lg:grid-cols-12 items-start">
+          {/* Left Column: Input Sandbox & Configurations */}
+          <div className="lg:col-span-5 space-y-4">
+            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+              <h2 className="mb-4 text-xs font-bold uppercase tracking-wider text-slate-550 dark:text-slate-400 flex items-center gap-1.5">
+                <span>1. Ingestion Sandbox</span>
+              </h2>
 
-        {charCount > 10000 && (
-          <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-3.5 text-sm text-amber-800 dark:border-amber-950/40 dark:bg-amber-950/20 dark:text-amber-300">
-            ⚠️ <strong>Length Warning:</strong> Current input has {charCount.toLocaleString()} characters.
-            The maximum supported limit is 10,000 characters. Please shorten it.
-          </div>
-        )}
+              <InputTabs
+                inputType={inputType}
+                setInputType={setInputType}
+                articleInputs={articleInputs}
+                onArticleChange={handleArticleChange}
+                onAddArticle={handleAddArticle}
+                onRemoveArticle={handleRemoveArticle}
+                bulkPasteText={bulkPasteText}
+                setBulkPasteText={setBulkPasteText}
+                onSplitBulkText={handleSplitBulkText}
+                urlInput={urlInput}
+                setUrlInput={setUrlInput}
+                fileName={fileName}
+                fileCharCount={fileText.length}
+                onFilePicked={onFilePicked}
+                charCount={charCount}
+              />
 
-        <div className="mt-5 flex flex-wrap items-center gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition-colors dark:border-slate-800 dark:bg-slate-900">
-          <button
-            type="button"
-            onClick={handleSummarize}
-            disabled={loading || charCount > 10000}
-            className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 px-5 py-2.5 text-sm font-medium text-white transition hover:from-brand-700 hover:to-indigo-700 disabled:cursor-not-allowed disabled:opacity-70"
-          >
-            {loading && <LoadingSpinner />}
-            {loading ? "Generating summary..." : "Generate Summary"}
-          </button>
+              {charCount > 10000 && (
+                <div className="mt-4 flex gap-2 rounded-xl border border-amber-250 bg-amber-50/50 p-3.5 text-xs text-amber-800 dark:border-amber-900/40 dark:bg-amber-950/20 dark:text-amber-300">
+                  <AlertTriangle className="h-4.5 w-4.5 shrink-0 text-amber-600" />
+                  <div>
+                    <strong>Length limit reached:</strong> Current input has {charCount.toLocaleString()} characters.
+                    The maximum supported limit is 10,000. Please truncate.
+                  </div>
+                </div>
+              )}
+            </div>
 
-          <button
-            type="button"
-            onClick={handleClear}
-            className="rounded-xl border border-slate-300 px-5 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
-          >
-            Clear
-          </button>
+            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900 space-y-4">
+              <h2 className="text-xs font-bold uppercase tracking-wider text-slate-550 dark:text-slate-400 flex items-center gap-1.5">
+                <Sliders className="h-4 w-4 text-indigo-500" />
+                <span>2. Parameter Settings</span>
+              </h2>
 
-          <label className="ml-auto flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
-            Summary Length
-            <select
-              value={summaryLength}
-              onChange={(event) => setSummaryLength(event.target.value)}
-              disabled={loading}
-              className="rounded-lg border border-slate-300 bg-white px-2 py-1 text-sm outline-none focus:border-brand-500 dark:border-slate-700 dark:bg-slate-950"
-            >
-              <option value="short">Short</option>
-              <option value="medium">Medium</option>
-              <option value="long">Long</option>
-            </select>
-          </label>
-        </div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-slate-700 dark:text-slate-350">
+                    Summary Length
+                  </label>
+                  <select
+                    value={summaryLength}
+                    onChange={(event) => setSummaryLength(event.target.value)}
+                    disabled={loading || compareAll}
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-medium outline-none focus:border-indigo-500 focus:bg-white dark:border-slate-800 dark:bg-slate-950 dark:focus:bg-slate-950 transition duration-200"
+                  >
+                    <option value="short">Short (approx. 2 sentences)</option>
+                    <option value="medium">Medium (standard)</option>
+                    <option value="long">Long (comprehensive)</option>
+                  </select>
+                </div>
 
-        <div className="mt-3 grid gap-3 md:grid-cols-2">
-          <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition-colors dark:border-slate-800 dark:bg-slate-900">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">Summary Mode</p>
-            <div className="flex gap-2">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-slate-700 dark:text-slate-350">
+                    Response Tone
+                  </label>
+                  <select
+                    value={tone}
+                    onChange={(event) => setTone(event.target.value)}
+                    disabled={loading}
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-medium outline-none focus:border-indigo-500 focus:bg-white dark:border-slate-800 dark:bg-slate-950 dark:focus:bg-slate-950 transition duration-200"
+                  >
+                    <option value="formal">Formal & Technical</option>
+                    <option value="simple">Simple Language</option>
+                    <option value="beginner">Beginner-friendly</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="pt-2 border-t border-slate-100 dark:border-slate-800/60 grid gap-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs font-semibold text-slate-700 dark:text-slate-300">Format</p>
+                    <p className="text-[10px] text-slate-500">Paragraph layout vs bullet lists</p>
+                  </div>
+                  <div className="flex gap-1 bg-slate-100 dark:bg-slate-950 p-1 rounded-xl">
+                    <button
+                      type="button"
+                      onClick={() => setMode("normal")}
+                      className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition ${
+                        mode === "normal"
+                          ? "bg-white text-indigo-650 shadow-sm dark:bg-slate-900 dark:text-indigo-400"
+                          : "text-slate-500 hover:text-slate-800 dark:hover:text-slate-250"
+                      }`}
+                    >
+                      Normal
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setMode("bullet")}
+                      className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition ${
+                        mode === "bullet"
+                          ? "bg-white text-indigo-650 shadow-sm dark:bg-slate-900 dark:text-indigo-400"
+                          : "text-slate-500 hover:text-slate-800 dark:hover:text-slate-250"
+                      }`}
+                    >
+                      Bullets
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs font-semibold text-slate-700 dark:text-slate-300">Compare Lengths</p>
+                    <p className="text-[10px] text-slate-500">Run Short, Medium & Long side-by-side</p>
+                  </div>
+                  <button
+                    type="button"
+                    disabled={loading}
+                    onClick={() => setCompareAll((prev) => !prev)}
+                    className={`relative h-6 w-11 rounded-full transition duration-300 ${compareAll ? "bg-indigo-600" : "bg-slate-200 dark:bg-slate-800"}`}
+                    aria-pressed={compareAll}
+                  >
+                    <span
+                      className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow-sm transition duration-300 ${compareAll ? "left-5.5" : "left-0.5"}`}
+                    />
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Run Operations */}
+            <div className="flex items-center gap-3">
               <button
                 type="button"
-                disabled={loading}
-                onClick={() => setMode("normal")}
-                className={`rounded-lg px-3 py-2 text-sm font-medium transition ${
-                  mode === "normal"
-                    ? "bg-brand-600 text-white"
-                    : "border border-slate-300 text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
-                }`}
+                onClick={handleSummarize}
+                disabled={loading || charCount > 10000}
+                className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-650 to-violet-650 px-5 py-3 text-sm font-semibold text-white shadow-md shadow-indigo-600/10 hover:shadow-indigo-600/20 transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 disabled:transform-none"
               >
-                Normal
+                {loading ? <LoadingSpinner /> : <Play className="h-4 w-4 fill-white" />}
+                <span>{loading ? "Inference Processing..." : "Execute Summary"}</span>
               </button>
+
               <button
                 type="button"
-                disabled={loading}
-                onClick={() => setMode("bullet")}
-                className={`rounded-lg px-3 py-2 text-sm font-medium transition ${
-                  mode === "bullet"
-                    ? "bg-brand-600 text-white"
-                    : "border border-slate-300 text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
-                }`}
+                onClick={handleClear}
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-250 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 transition hover:-translate-y-0.5"
+                title="Clear Workspace"
               >
-                Bullet Points
+                <RotateCcw className="h-4 w-4" />
+                <span className="hidden sm:inline">Clear</span>
               </button>
             </div>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition-colors dark:border-slate-800 dark:bg-slate-900">
-            <label className="flex items-center justify-between gap-4 text-sm text-slate-700 dark:text-slate-200">
-              <span className="font-medium">Compare All Lengths</span>
-              <button
-                type="button"
-                disabled={loading}
-                onClick={() => setCompareAll((prev) => !prev)}
-                className={`relative h-7 w-14 rounded-full transition ${compareAll ? "bg-brand-600" : "bg-slate-300 dark:bg-slate-700"}`}
-                aria-pressed={compareAll}
-                aria-label="Toggle comparison"
-              >
-                <span
-                  className={`absolute top-1 h-5 w-5 rounded-full bg-white transition ${compareAll ? "left-8" : "left-1"}`}
-                />
-              </button>
-            </label>
-            <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
-              Generate Short, Medium, and Long summaries side-by-side.
-            </p>
+          {/* Right Column: Output & Evaluation Sandbox */}
+          <div className="lg:col-span-7">
+            {compareAll ? (
+              <ComparisonGrid
+                comparison={comparison}
+                error={error}
+                mode={mode}
+                onCopy={handleCopyComparison}
+                copied={comparisonCopied}
+                tone={summaryStats.tone}
+                numArticles={summaryStats.numArticles}
+              />
+            ) : (
+              <SummaryCard
+                summary={summary}
+                error={error}
+                inputType={lastInputType}
+                onCopy={handleCopy}
+                copied={copied}
+                usedLength={summaryLength}
+                mode={mode}
+                tone={summaryStats.tone}
+                numArticles={summaryStats.numArticles}
+                originalWords={summaryStats.originalWords}
+                summaryWords={summaryStats.summaryWords}
+                compression={summaryStats.compression}
+              />
+            )}
           </div>
         </div>
-
-        <div className="mt-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition-colors dark:border-slate-800 dark:bg-slate-900">
-          <label className="flex items-center gap-3 text-sm text-slate-700 dark:text-slate-200">
-            <span className="font-medium">Tone</span>
-            <select
-              value={tone}
-              onChange={(event) => setTone(event.target.value)}
-              disabled={loading}
-              className="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm outline-none focus:border-brand-500 dark:border-slate-700 dark:bg-slate-950"
-            >
-              <option value="formal">Formal</option>
-              <option value="simple">Simple</option>
-              <option value="beginner">Beginner-friendly</option>
-            </select>
-          </label>
-        </div>
-
-        <div className="mt-5">
-          {compareAll ? (
-            <ComparisonGrid
-              comparison={comparison}
-              error={error}
-              mode={mode}
-              onCopy={handleCopyComparison}
-              copied={comparisonCopied}
-              tone={summaryStats.tone}
-              numArticles={summaryStats.numArticles}
-            />
-          ) : (
-            <SummaryCard
-              summary={summary}
-              error={error}
-              inputType={lastInputType}
-              onCopy={handleCopy}
-              copied={copied}
-              usedLength={summaryLength}
-              mode={mode}
-              tone={summaryStats.tone}
-              numArticles={summaryStats.numArticles}
-              originalWords={summaryStats.originalWords}
-              summaryWords={summaryStats.summaryWords}
-              compression={summaryStats.compression}
-            />
-          )}
-        </div>
-      </div>
-    </section>
+      </section>
+    </div>
   );
 }

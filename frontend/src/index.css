@@ -2,18 +2,47 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  @apply min-h-screen bg-slate-100 text-slate-900 antialiased transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100;
+@layer base {
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    @apply min-h-screen bg-slate-50 text-slate-900 antialiased transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  }
 }
 
 #root {
-  @apply min-h-screen;
+  @apply min-h-screen flex flex-col;
+}
+
+/* Custom modern scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-300 dark:bg-slate-800 rounded-full hover:bg-slate-400 dark:hover:bg-slate-700 transition-colors;
+}
+
+/* Tech mesh background grid */
+.bg-grid-pattern {
+  background-image: radial-gradient(rgba(99, 102, 241, 0.08) 1px, transparent 1.5px);
+  background-size: 24px 24px;
+}
+.dark .bg-grid-pattern {
+  background-image: radial-gradient(rgba(129, 140, 248, 0.05) 1.5px, transparent 1.5px);
+  background-size: 32px 32px;
 }
 
 @keyframes fade-in-up {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
@@ -22,5 +51,11 @@ body {
 }
 
 .animate-fade-in {
-  animation: fade-in-up 320ms ease-out;
+  animation: fade-in-up 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* Glassmorphism utility */
+.glass-panel {
+  @apply bg-white/70 backdrop-blur-md border border-slate-200/50 dark:bg-slate-900/60 dark:border-slate-800/50 shadow-sm;
+}
+
